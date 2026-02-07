@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoVision - Geospatial Intelligence Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <div class="search-container">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search location...">
+        </div>
+        
+        <div class="logo-container">
+            <h1 class="logo">GeoVision</h1>
+            <span class="logo-subtitle">Geospatial Intelligence Platform</span>
+        </div>
+        
+        <div class="top-controls">
+            <button class="header-btn" id="viewModeBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <span>3D View</span>
+            </button>
+            <button class="header-btn" id="layersBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <span>Layers</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-container">
+        <!-- Map Area -->
+        <div class="map-container" id="mapContainer">
+            <div class="map-placeholder">
+                <div class="map-grid"></div>
+                <div class="map-overlay">
+                    <div class="location-marker" id="locationMarker">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Controls Bottom Left -->
+            <div class="map-controls">
+                <div class="control-section">
+                    <div class="control-label">Risk Overlay</div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="riskToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="risk-legend" id="riskLegend">
+                    <div class="legend-item">
+                        <div class="legend-color risk-high"></div>
+                        <span>High Risk</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color risk-moderate"></div>
+                        <span>Moderate</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color risk-low"></div>
+                        <span>Low Risk</span>
+                    </div>
+                </div>
+                
+                <div class="zoom-controls">
+                    <button class="zoom-btn" id="zoomIn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <button class="zoom-btn" id="zoomOut">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <aside class="right-panel" id="rightPanel">
+            <!-- Data Section -->
+            <div class="panel-section data-section" id="dataSection">
+                <div class="section-header">
+                    <h2 class="section-title">Location Intelligence</h2>
+                    <button class="close-btn" id="closeDataBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="location-info" id="locationInfo">
+                    <div class="info-card">
+                        <div class="info-label">Selected Location</div>
+                        <div class="info-value" id="selectedLocation">Camarines Norte, Philippines</div>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <div class="metric-label">Population</div>
+                            <div class="metric-value" id="population">583,313</div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </div>
+                            <div class="metric-label">Flood Risk</div>
+                            <div class="metric-value risk-indicator high">High</div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                </svg>
+                            </div>
+                            <div class="metric-label">Infrastructure</div>
+                            <div class="metric-value">Moderate</div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="metric-label">Seismic Activity</div>
+                            <div class="metric-value risk-indicator moderate">Moderate</div>
+                        </div>
+                    </div>
+                    
+                    <div class="hazard-timeline">
+                        <div class="timeline-header">Recent Events</div>
+                        <div class="timeline-items">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">Jan 2025</div>
+                                    <div class="timeline-text">Flooding in low-lying areas</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">Dec 2024</div>
+                                    <div class="timeline-text">Typhoon warnings issued</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Vision Section -->
+            <div class="panel-section ai-section" id="aiSection">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" y1="19" x2="12" y2="22"/>
+                        </svg>
+                        AI VISION
+                    </h2>
+                    <button class="expand-btn" id="expandAiBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <polyline points="9 21 3 21 3 15"></polyline>
+                            <line x1="21" y1="3" x2="14" y2="10"></line>
+                            <line x1="3" y1="21" x2="10" y2="14"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="ai-chat" id="aiChat">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="ai-message">
+                            <div class="message-avatar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">Hi, I am AI VISION. What would you like to know?</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-questions">
+                        <button class="quick-question-btn">Population statistics</button>
+                        <button class="quick-question-btn">Disaster history</button>
+                        <button class="quick-question-btn">Infrastructure needs</button>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <button class="attachment-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                            </svg>
+                        </button>
+                        <input type="text" id="chatInput" class="chat-input" placeholder="Ask about this location...">
+                        <button class="send-btn" id="sendBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Layers Panel (Hidden by default) -->
+    <div class="layers-panel" id="layersPanel">
+        <div class="layers-header">
+            <h3>Map Layers</h3>
+            <button class="close-btn" id="closeLayersBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="layers-content">
+            <div class="layer-group">
+                <div class="layer-group-title">Base Layers</div>
+                <label class="layer-item">
+                    <input type="checkbox" checked>
+                    <span>Satellite Imagery</span>
+                </label>
+                <label class="layer-item">
+                    <input type="checkbox">
+                    <span>Terrain & Elevation</span>
+                </label>
+                <label class="layer-item">
+                    <input type="checkbox" checked>
+                    <span>Infrastructure</span>
+                </label>
+            </div>
+            
+            <div class="layer-group">
+                <div class="layer-group-title">Hazard Layers</div>
+                <label class="layer-item">
+                    <input type="checkbox">
+                    <span>Flood Zones</span>
+                </label>
+                <label class="layer-item">
+                    <input type="checkbox">
+                    <span>Fault Lines (PHIVOLCS)</span>
+                </label>
+                <label class="layer-item">
+                    <input type="checkbox">
+                    <span>Landslide Risk</span>
+                </label>
+                <label class="layer-item">
+                    <input type="checkbox">
+                    <span>Volcanic Activity</span>
+                </label>
+            </div>
+            
+            <div class="layer-group">
+                <div class="layer-group-title">Live Data</div>
+                <label class="layer-item">
+                    <input type="checkbox">
+                    <span>Weather Conditions</span>
+                </label>
+                <label class="layer-item">
+                    <input type="checkbox">
+                    <span>Motion Detection</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
